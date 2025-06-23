@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Abhyas - Fitness Starts At Home</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+  * {
+    box-sizing: border-box;
+  }
+  body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    scroll-behavior: smooth;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(270deg, #0a1128, #000000, #0a1128, #000000);
+    background-size: 800% 800%;
+    animation: gradientAnimation 25s ease infinite;
+    color: #eee;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  @keyframes gradientAnimation {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+  }
+
+  header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: rgba(0, 9, 20, 0.9);
+    backdrop-filter: saturate(180%) blur(15px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    height: 60px;
+    box-shadow: 0 3px 12px rgb(0 0 0 / 0.75);
+    z-index: 1000;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    font-weight: 700;
+    font-size: 1.9rem;
+    color: #59a6ff;
+    user-select: none;
+  }
+  .logo svg {
+    width: 40px;
+    height: 40px;
+    fill: url(#gradientA);
+    filter: drop-shadow(0 0 6px rgba(89,166,255,0.9));
+  }
+
+  nav a {
+    color: #a0c7ff;
+    font-weight: 600;
+    font-size: 1rem;
+    margin-left: 1.8rem;
+    text-decoration: none;
+    transition: color 0.25s ease;
+    user-select: none;
+    cursor: pointer;
+  }
+  nav a:hover,
+  nav a:focus {
+    color: #59a6ff;
+    outline: none;
+  }
+
+  main {
+    flex-grow: 1;
+    padding: 90px 1rem 3rem 1rem;
+    max-width: 720px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: calc(100vh - 60px);
+  }
+
+  #title {
+    font-weight: 800;
+    color: #bfdcff;
+    font-size: 3rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    text-shadow: 0 0 14px rgba(89,166,255,0.95);
+    user-select: none;
+  }
+
+  button {
+    background: #5a9eff;
+    border: none;
+    border-radius: 12px;
+    padding: 1rem 3rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    cursor: pointer;
+    color: #051923;
+    box-shadow: 0 0 25px #5a9effcc;
+    transition: background-color 0.3s ease, transform 0.15s ease, box-shadow 0.3s ease;
+  }
+  button:hover, button:focus {
+    background: #3a76d2;
+    box-shadow: 0 0 35px #3a76d2cc;
+    transform: scale(1.07);
+    outline: none;
+  }
+
+  #exerciseOptions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    max-width: 720px;
+  }
+  .exercise-btn {
+    background: rgba(90, 158, 255, 0.1);
+    border: 2px solid #59a6ff;
+    color: #aadcff;
+    font-size: 1.1rem;
+    padding: 0.85rem 1.5rem;
+    border-radius: 16px;
+    cursor: pointer;
+    font-weight: 600;
+    user-select: none;
+    flex: 1 1 140px;
+    text-align: center;
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .exercise-btn:hover {
+    background: #59a6ff;
+    color: #051923;
+    box-shadow: 0 0 25px #59a6ffcc;
+  }
+
+  #videoSection {
+    display: none;
+    max-width: 720px;
+    margin-top: 2rem;
+  }
+  #videoContainerWrapper {
+    position: relative;
+    width: 640px;
+    max-width: 100%;
+    height: 480px;
+    box-shadow: 0 0 40px #3a76d2cc;
+    border-radius: 22px;
+    overflow: hidden;
+    user-select: none;
+    margin-bottom: 15px;
+  }
+  #videoContainer {
+    position: relative;
+    width: 640px;
+    max-width: 100%;
+    height: 480px;
+    border-radius: 22px;
+    overflow: hidden;
+  }
+  video, canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 640px;
+    max-width: 100%;
+    height: 480px;
+    border-radius: 22px;
+    object-fit: cover;
+  }
+  canvas {
+    pointer-events: none;
+  }
+
+  #stopBtn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: #ff405a;
+    box-shadow: 0 0 28px #ff405abb;
+    padding: 0.35rem 0.8rem;
+    font-size: 0.85rem;
+    border-radius: 12px;
+    cursor: pointer;
+    color: #fff;
+    border: none;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.15s ease;
+    z-index: 10;
+  }
+  #stopBtn:hover, #stopBtn:focus {
+    background: #d9304b;
+    box-shadow: 0 0 35px #d9304bcc;
+    outline: none;
+    transform: scale(1.1);
+  }
+
+  #info {
+    font-size: 1.3rem;
+    color: #a8d0ff;
+    min-height: 28px;
+    text-align: center;
+    font-weight: 700;
+    text-shadow: 0 0 10px rgba(58,118,210,0.8);
+    user-select: none;
+  }
+
+  #tipsRepsContainer {
+    max-width: 720px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 40px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+
+  #instructions {
+    flex: 1 1 440px;
+    font-size: 1.05rem;
+    color: #7bb5ff;
+    min-height: 90px;
+    text-align: left;
+    font-weight: 600;
+    user-select: none;
+    text-shadow: 0 0 5px rgba(58,118,210,0.6);
+    white-space: pre-line;
+  }
+
+  #repCounter {
+    flex: 0 0 auto;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #59a6ff;
+    text-align: center;
+    text-shadow: 0 0 18px #4486d8cc;
+    user-select: none;
+    min-width: 130px;
+  }
+
+  /* About Section */
+  #about {
+    max-width: 720px;
+    margin-top: 3rem;
+    background: rgba(30, 47, 77, 0.85);
+    border-radius: 18px;
+    padding: 1.8rem 2rem;
+    box-shadow: 0 8px 25px rgba(40, 80, 140, 0.6);
+    transition: background-color 0.3s ease;
+    color: #b5cde8;
+  }
+  #about h2 {
+    font-size: 1.85rem;
+    font-weight: 700;
+    color: #5a9eff;
+    margin-bottom: 1rem;
+    text-shadow: 0 0 12px rgba(89,158,255,0.95);
+    user-select: none;
+  }
+  #about p {
+    font-size: 1.15rem;
+    line-height: 1.6;
+  }
+
+
+  #contact {
+    max-width: 720px;
+    color: #aecfff;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    flex-wrap: wrap;
+  }
+  #contact h2 {
+    font-size: 1.85rem;
+    font-weight: 700;
+    color: #5a9eff;
+    margin-bottom: 1rem;
+    text-shadow: 0 0 10px rgba(89,158,255,0.95);
+    user-select: none;
+    width: 100%;
+  }
+  #contact ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 3rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  #contact li {
+    font-size: 1.1rem;
+    text-align: center;
+    color: #daf0ff;
+  }
+  #contact strong {
+    color: #85b1ff;
+    display: block;
+    font-weight: 700;
+    margin-bottom: 0.15rem;
+  }
+  #contact a {
+    color: #b1defd;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    word-break: break-word;
+  }
+  #contact a:hover, #contact a:focus {
+    color: #5a9eff;
+    outline: none;
+  }
+
+ 
+
+
+  /* Responsive */
+  @media (max-width: 700px) {
+    #videoContainerWrapper {
+      width: 100%;
+      height: auto;
+    }
+    #videoContainer, video, canvas {
+      height: auto;
+      position: relative;
+      width: 100%;
+      border-radius: 16px;
+    }
+    #stopBtn {
+      top: 8px;
+      right: 8px;
+      padding: 0.3rem 0.7rem;
+      font-size: 0.8rem;
+    }
+    #title {
+      font-size: 2.2rem;
+    }
+    button {
+      padding: 0.85rem 2rem;
+      font-size: 1.1rem;
+    }
+    #instructions {
+      font-size: 1rem;
+      min-height: 80px;
+      max-width: 100%;
+    }
+    #tipsRepsContainer {
+      gap: 20px;
+      flex-direction: column;
+      align-items: center;
+    }
+    #instructions {
+      flex: unset;
+      text-align: center;
+    }
+    #repCounter {
+      min-width: auto;
+      font-size: 1.3rem;
+      margin-top: 0.5rem;
+    }
+    #exerciseOptions {
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      max-width: 100%;
+    }
+    .exercise-btn {
+      flex: 1 1 40%;
+      font-size: 1rem;
+    }
+    #contact ul {
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    #contact {
+      gap: 1.5rem;
+    }
+    
+  }
+</style>
+</head>
+<body>
+  <header>
+    <div class="logo" aria-label="Abhyas logo and name">
+      <svg aria-hidden="true" focusable="false" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="gradientA" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#5a9eff"/>
+            <stop offset="100%" stop-color="#3062c9"/>
+          </linearGradient>
+        </defs>
+        <path fill="url(#gradientA)" d="M32 4L12 60H20L28 42H36L44 60H52L32 4Z" />
+      </svg>
+      Abhyas
+    </div>
+    <nav role="navigation" aria-label="Main navigation">
+      <a href="#home" tabindex="0" id="navHome">Home</a>
+      <a href="#about" tabindex="0" id="navAbout">About</a>
+      <a href="#contact" tabindex="0" id="navContact">Contact</a>
+      <a href="#" tabindex="0" id="navDiet">Diet</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1 id="title">Fitness starts at home</h1>
+    <button id="letsGoBtn" aria-label="Start Fitness">Let's Go</button>
+
+    <div id="exerciseOptions" style="display:none;" aria-label="Exercise options" role="list" tabindex="0">
+      <!-- Dynamically inserted exercise buttons -->
+    </div>
+
+    <div id="videoSection">
+      <div id="videoContainerWrapper">
+        <div id="videoContainer" aria-label="Webcam and posture detection">
+          <video id="video" autoplay playsinline muted></video>
+          <canvas id="output"></canvas>
+          <button id="stopBtn" aria-label="Stop exercise and return to exercise selection">✕</button>
+        </div>
+      </div>
+      <div id="info" role="status" aria-live="polite">Initializing...</div>
+      <div id="tipsRepsContainer">
+        <div id="instructions" aria-live="polite"></div>
+        <div id="repCounter" aria-live="polite"></div>
+      </div>
+    </div>
+
+    <div id="summarySection" style="display:none; text-align:center; margin-top:2rem;">
+  <h2 style="color:#5a9eff;">Workout Summary</h2>
+  <p id="summaryText" style="font-size:1.2rem; color:#a8d0ff;"></p>
+  <button onclick="restartWorkout()">Back to Exercises</button>
+</div>
+
+
+    <section id="about" tabindex="0" aria-label="About Abhyas" style="margin-top: 3rem;">
+      <h2>About</h2>
+      <p>
+        Abhyas is your personal fitness companion that helps you exercise at home by tracking your posture and reps in real-time using your webcam. Our mission is to make fitness accessible, enjoyable, and effective for everyone.
+      </p>
+    </section>
+
+    <section id="dietIntro" style="margin-top: 3rem; max-width: 720px; background: rgba(20, 27, 44, 0.95); border-radius: 18px; padding: 1.8rem 2rem; box-shadow: 0 8px 25px rgba(40, 80, 140, 0.6); color: #b5cde8;">
+  <h2 style="font-size: 1.85rem; font-weight: 700; color: #5a9eff; margin-bottom: 1rem; text-shadow: 0 0 12px rgba(89,158,255,0.95); user-select: none;">
+    Personalized Diet Planner
+  </h2>
+  <p style="font-size: 1.15rem; line-height: 1.6;">
+    Fuel your fitness journey with a diet designed just for you. Our AI-powered Diet Planner suggests personalized meal guidelines based on your age, health, and goals — ensuring you eat smart while you train hard.
+  </p>
+
+  <div style="text-align:center; margin-top:1.5rem;">
+    <button onclick="navDiet.click()" style="padding: 0.8rem 2rem; font-size: 1.1rem; border-radius: 12px; font-weight: 600; background-color: #5a9eff; color: #051923; border: none; box-shadow: 0 0 20px #5a9effaa; cursor: pointer;">
+      Try the Diet Planner
+    </button>
+  </div>
+</section>
+
+
+    <section id="dietPage" style="display:none; width:100vw; margin:0; padding:0; background:#0a1128;">
+  <iframe 
+    src="diet.html" 
+    style="width:100vw; height:1000px; border:none; background:#0a1128;" 
+    title="Diet Recommendation Fullscreen"
+  ></iframe>
+</section>
+
+
+  <section id="contact" tabindex="0" aria-label="Contact information" style="margin-top: 2.5rem; margin-bottom: 5rem; max-width: 720px; background: rgba(20, 27, 44, 0.95); border-radius: 18px; padding: 1.8rem 2rem; box-shadow: 0 8px 25px rgba(40, 80, 140, 0.6); color: #b5cde8;">
+  <h2>Contact</h2>
+  <ul>
+    <li>
+      <strong>Somiya Agarwal</strong><br />
+      <a href="mailto:somiya.agarwal@example.com" aria-label="Email Somiya Agarwal" target="_blank" rel="noopener noreferrer">somiya.agarwal@example.com</a>
+    </li>
+    <li>
+      <strong>Sakshi</strong><br />
+      <a href="mailto:sakshi@example.com" aria-label="Email Sakshi" target="_blank" rel="noopener noreferrer">sakshi@example.com</a>
+    </li>
+    <li>
+      <strong>Saloni Bhardwaj</strong><br />
+      <a href="mailto:saloni.bhardwaj@example.com" aria-label="Email Saloni Bhardwaj" target="_blank" rel="noopener noreferrer">saloni.bhardwaj@example.com</a>
+    </li>
+  </ul>
+</section>
+</main>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.20.0/dist/tf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/pose-detection"></script>
+
+  <script>
+    const letsGoBtn = document.getElementById('letsGoBtn');
+    const exerciseOptionsDiv = document.getElementById('exerciseOptions');
+    const videoSection = document.getElementById('videoSection');
+    const title = document.getElementById('title');
+    const instructionsEl = document.getElementById('instructions');
+    const repCounterEl = document.getElementById('repCounter');
+    const info = document.getElementById('info');
+    const stopBtn = document.getElementById('stopBtn');
+    const aboutSection = document.getElementById('about');
+    const contactSection = document.getElementById('contact');
+    const navHome = document.getElementById('navHome');
+    const navAbout = document.getElementById('navAbout');
+    const navContact = document.getElementById('navContact');
+
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('output');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = 640;
+    canvas.height = 480;
+
+    let detector;
+    let poses;
+
+    const exercises = [
+      'Squats',
+      'Push-ups',
+      'Jumping Jacks',
+      'Lunges',
+      'Shoulder Press'
+    ];
+
+    const skeletonConnections = [
+      ['left_eye', 'right_eye'],
+      ['left_eye', 'left_ear'],
+      ['right_eye', 'right_ear'],
+      ['left_shoulder', 'right_shoulder'],
+      ['left_shoulder', 'left_elbow'],
+      ['left_elbow', 'left_wrist'],
+      ['right_shoulder', 'right_elbow'],
+      ['right_elbow', 'right_wrist'],
+      ['left_shoulder', 'left_hip'],
+      ['right_shoulder', 'right_hip'],
+      ['left_hip', 'right_hip'],
+      ['left_hip', 'left_knee'],
+      ['left_knee', 'left_ankle'],
+      ['right_hip', 'right_knee'],
+      ['right_knee', 'right_ankle']
+    ];
+
+    const keypointIndices = {
+      'nose': 0,
+      'left_eye': 1,
+      'right_eye': 2,
+      'left_ear': 3,
+      'right_ear': 4,
+      'left_shoulder': 5,
+      'right_shoulder': 6,
+      'left_elbow': 7,
+      'right_elbow': 8,
+      'left_wrist': 9,
+      'right_wrist': 10,
+      'left_hip': 11,
+      'right_hip': 12,
+      'left_knee': 13,
+      'right_knee': 14,
+      'left_ankle': 15,
+      'right_ankle': 16
+    };
+
+    let currentExercise = null;
+    let repCount = 0;
+    let state = null;
+
+    function toDegrees(rad) {
+      return rad * 180 / Math.PI;
+    }
+
+    function calculateAngle(p1, p2, p3) {
+      const a = Math.sqrt((p3.x - p2.x) ** 2 + (p3.y - p2.y) ** 2);
+      const b = Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2);
+      const c = Math.sqrt((p3.x - p1.x) ** 2 + (p3.y - p1.y) ** 2);
+      const angleRad = Math.acos(Math.min(Math.max((a*a + b*b - c*c) / (2*a*b), -1), 1));
+      return toDegrees(angleRad);
+    }
+
+    function drawKeypoint(keypoint) {
+      const { x, y, score } = keypoint;
+      if (score > 0.3) {
+        ctx.beginPath();
+        ctx.arc(x, y, 6, 0, 2 * Math.PI);
+        ctx.fillStyle = '#59a6ff';
+        ctx.shadowColor = '#59a6ff';
+        ctx.shadowBlur = 14;
+        ctx.fill();
+        ctx.closePath();
+      }
+    }
+
+    function drawSkeleton(keypoints) {
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = '#59a6ff';
+      ctx.shadowColor = '#59a6ff';
+      ctx.shadowBlur = 20;
+
+      for (const [partA, partB] of skeletonConnections) {
+        const kpA = keypoints[keypointIndices[partA]];
+        const kpB = keypoints[keypointIndices[partB]];
+        if (kpA && kpB && kpA.score > 0.3 && kpB.score > 0.3) {
+          ctx.beginPath();
+          ctx.moveTo(kpA.x, kpA.y);
+          ctx.lineTo(kpB.x, kpB.y);
+          ctx.stroke();
+          ctx.closePath();
+        }
+      }
+    }
+
+    function detectSquats(keypoints) {
+      if (!keypoints[keypointIndices.left_hip] || !keypoints[keypointIndices.left_knee] || !keypoints[keypointIndices.left_ankle]) {
+        return { isCorrect: false, message: 'Please stay fully visible in frame.', suggestions: '', repDetected: false };
+      }
+      const hip = keypoints[keypointIndices.left_hip];
+      const knee = keypoints[keypointIndices.left_knee];
+      const ankle = keypoints[keypointIndices.left_ankle];
+
+      const kneeAngle = calculateAngle(hip, knee, ankle);
+      const isDown = kneeAngle < 110;
+      const isUp = kneeAngle > 150;
+      let msg = '';
+      let suggestions = '';
+      let repDetected = false;
+
+      if (isDown && state !== 'down') {
+        state = 'down';
+        msg = 'Good squat depth!';
+      } else if (isUp && state === 'down') {
+        repCount++;
+        repDetected = true;
+        state = 'up';
+        msg = 'Well done! Rep counted.';
+      } else if (state !== 'down' && state !== 'up') {
+        state = 'up';
+        msg = 'Stand up straight.';
+      } else {
+        msg = state === 'down' ? 'Hold squat position...' : 'Stand up straight.';
+      }
+
+      const correctPosture = kneeAngle < 120 && kneeAngle > 60;
+      suggestions = correctPosture
+        ? 'Keep your weight on your heels and chest lifted.'
+        : 'Try not to let your knees go too far forward and keep your back straight.';
+
+      return { isCorrect: correctPosture, message: msg, suggestions, repDetected };
+    }
+
+    function detectPushups(keypoints) {
+      if (!keypoints[keypointIndices.left_shoulder] || !keypoints[keypointIndices.left_elbow] || !keypoints[keypointIndices.left_wrist] ||
+          !keypoints[keypointIndices.right_shoulder] || !keypoints[keypointIndices.right_elbow] || !keypoints[keypointIndices.right_wrist]) {
+        return { isCorrect: false, message: 'Please stay fully visible in frame.', suggestions: '', repDetected: false };
+      }
+
+      const leftShoulder = keypoints[keypointIndices.left_shoulder];
+      const leftElbow = keypoints[keypointIndices.left_elbow];
+      const leftWrist = keypoints[keypointIndices.left_wrist];
+      const rightShoulder = keypoints[keypointIndices.right_shoulder];
+      const rightElbow = keypoints[keypointIndices.right_elbow];
+      const rightWrist = keypoints[keypointIndices.right_wrist];
+
+      const leftElbowAngle = calculateAngle(leftShoulder, leftElbow, leftWrist);
+      const rightElbowAngle = calculateAngle(rightShoulder, rightElbow, rightWrist);
+
+      const isDown = leftElbowAngle < 90 && rightElbowAngle < 90;
+      const isUp = leftElbowAngle > 160 && rightElbowAngle > 160;
+
+      let msg = '';
+      let suggestions = '';
+      let repDetected = false;
+
+      if (isDown && state !== 'down') {
+        state = 'down';
+        msg = 'Good! Keep elbows close to body.';
+      } else if (isUp && state === 'down') {
+        repCount++;
+        repDetected = true;
+        state = 'up';
+        msg = 'Rep counted. Keep going!';
+      } else if (state !== 'down' && state !== 'up') {
+        state = 'up';
+        msg = 'Start in plank position.';
+      } else {
+        msg = state === 'down' ? 'Hold down position...' : 'Push up position.';
+      }
+
+      let backOk = true;
+      if (keypoints[keypointIndices.left_hip] && keypoints[keypointIndices.right_hip]
+          && keypoints[keypointIndices.left_ankle] && keypoints[keypointIndices.right_ankle]) {
+        const leftHip = keypoints[keypointIndices.left_hip];
+        const rightHip = keypoints[keypointIndices.right_hip];
+        const leftAnkle = keypoints[keypointIndices.left_ankle];
+        const rightAnkle = keypoints[keypointIndices.right_ankle];
+
+        const hipToAnkleLeftY = Math.abs(leftHip.y - leftAnkle.y);
+        const hipToAnkleRightY = Math.abs(rightHip.y - rightAnkle.y);
+        backOk = hipToAnkleLeftY <= 85 && hipToAnkleRightY <= 85;
+      }
+      suggestions = backOk ? 'Maintain a strong core and straight back.' : 'Try to keep your back straighter.';
+
+      return { isCorrect: backOk, message: msg, suggestions, repDetected };
+    }
+
+    function detectShoulderPress(keypoints) {
+      if (!keypoints[keypointIndices.left_shoulder] || !keypoints[keypointIndices.left_elbow] || !keypoints[keypointIndices.left_wrist] ||
+          !keypoints[keypointIndices.right_shoulder] || !keypoints[keypointIndices.right_elbow] || !keypoints[keypointIndices.right_wrist] ||
+          !keypoints[keypointIndices.nose]) {
+        return { isCorrect: false, message: 'Please move fully into view.', suggestions: '', repDetected: false };
+      }
+
+      const nose = keypoints[keypointIndices.nose];
+      const leftShoulder = keypoints[keypointIndices.left_shoulder];
+      const rightShoulder = keypoints[keypointIndices.right_shoulder];
+      const leftElbow = keypoints[keypointIndices.left_elbow];
+      const rightElbow = keypoints[keypointIndices.right_elbow];
+      const leftWrist = keypoints[keypointIndices.left_wrist];
+      const rightWrist = keypoints[keypointIndices.right_wrist];
+
+      const leftElbowAngle = calculateAngle(leftShoulder, leftElbow, leftWrist);
+      const rightElbowAngle = calculateAngle(rightShoulder, rightElbow, rightWrist);
+
+      const leftWristAboveHead = leftWrist.y < nose.y + 10;
+      const rightWristAboveHead = rightWrist.y < nose.y + 10;
+
+      const armsUp = leftElbowAngle > 150 && rightElbowAngle > 150 && leftWristAboveHead && rightWristAboveHead;
+      const wristsNearShoulders = Math.abs(leftWrist.y - leftShoulder.y) < 30 && Math.abs(rightWrist.y - rightShoulder.y) < 30;
+      const armsDown = leftElbowAngle < 90 && rightElbowAngle < 90 && wristsNearShoulders;
+
+      let msg = '';
+      let suggestions = '';
+      let repDetected = false;
+
+      if (armsDown && state !== 'down') {
+        state = 'down';
+        msg = 'Arms lowered. Get ready and press up!';
+      } else if (armsUp && state === 'down') {
+        repCount++;
+        repDetected = true;
+        state = 'up';
+        msg = 'Great! Rep counted.';
+      } else if (state !== 'down' && state !== 'up') {
+        state = 'down';
+        msg = 'Start with arms down.';
+      } else {
+        msg = state === 'down' ? 'Press the weights up!' : 'Hold arms up...';
+      }
+
+      const shoulderDiff = Math.abs(leftShoulder.y - rightShoulder.y);
+
+      const correctPosture = shoulderDiff < 40;
+
+      suggestions = !correctPosture
+        ? 'Keep your shoulders level for proper form.'
+        : 'Maintain steady, controlled movements.';
+
+      return { isCorrect: correctPosture, message: msg, suggestions, repDetected };
+    }
+
+    function detectOtherExercise() {
+      return { isCorrect: true, message: 'Exercise detection not implemented yet.', suggestions: '', repDetected: false };
+    }
+
+    function detectExercisePosture(keypoints) {
+      if (!currentExercise) return { isCorrect: false, message: 'No exercise selected.', suggestions: '', repDetected: false };
+      switch (currentExercise.toLowerCase()) {
+        case 'squats': return detectSquats(keypoints);
+        case 'push-ups': return detectPushups(keypoints);
+        case 'shoulder press': return detectShoulderPress(keypoints);
+        default: return detectOtherExercise();
+      }
+    }
+
+    function showWorkoutSummary() {
+  const calories = (repCount * 0.5).toFixed(1); // Estimation
+  let feedback = repCount < 10 ? "Keep practicing!" :
+                 repCount < 25 ? "Great job!" :
+                 "You're a machine! 💪";
+
+  summaryText.innerHTML = `
+    <strong>Total Reps:</strong> ${repCount}<br>
+    <strong>Calories Burned:</strong> ~${calories} kcal<br>
+    <em>${feedback}</em>
+  `;
+  videoSection.style.display = 'none';
+  summarySection.style.display = 'block';
+}
+
+
+    async function poseDetectionFrame() {
+      if (!detector) return;
+
+      poses = await detector.estimatePoses(video, { maxPoses: 1, flipHorizontal: false });
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      if (poses && poses.length > 0) {
+        const keypoints = poses[0].keypoints.map(kp => ({
+          x: kp.x,
+          y: kp.y,
+          score: kp.score,
+          name: kp.name
+        }));
+
+        for (const kp of keypoints) {
+          drawKeypoint(kp);
+        }
+        drawSkeleton(keypoints);
+
+        let result = detectExercisePosture(keypoints);
+
+        instructionsEl.textContent = result.message + (result.suggestions ? '\n' + result.suggestions : '');
+        instructionsEl.style.color = result.isCorrect ? '#a8f0a2' : '#ff7b72';
+
+        if (result.repDetected) {
+          repCounterEl.textContent = `Reps: ${repCount}`;
+          speak(`Rep ${repCount}`);
+          repCounterEl.style.transform = 'scale(1.3)';
+          setTimeout(() => { repCounterEl.style.transform = 'scale(1)'; }, 300);
+        }
+
+        info.textContent = 'Posture detected. Keep going!';
+      } else {
+        info.textContent = 'No person detected. Please appear in front of the camera.';
+        instructionsEl.textContent = '';
+      }
+
+      requestAnimationFrame(poseDetectionFrame);
+    }
+
+    async function setupCamera() {
+      info.textContent = 'Requesting webcam access...';
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: false,
+        video: { width: 640, height: 480 }
+      });
+      video.srcObject = stream;
+      return new Promise((resolve) => {
+        video.onloadedmetadata = () => {
+          resolve(video);
+        };
+      });
+    }
+
+    async function createDetector() {
+      info.textContent = 'Loading pose detector model...';
+      const detectorConfig = {
+        modelType: poseDetection.movenet.modelType.SINGLEPOSE_LIGHTNING,
+        enableSmoothing: true
+      };
+      return await poseDetection.createDetector(poseDetection.SupportedModels.MoveNet, detectorConfig);
+    }
+
+    async function startDetection() {
+      try {
+        repCount = 0;
+        state = null;
+        repCounterEl.textContent = 'Reps: 0';
+        instructionsEl.textContent = '';
+        await setupCamera();
+        video.play();
+        detector = await createDetector();
+        info.textContent = 'Camera ready. Detecting posture...';
+        poseDetectionFrame();
+      } catch (err) {
+        info.textContent = 'Error accessing webcam or loading model: ' + err.message;
+        instructionsEl.textContent = '';
+        console.error(err);
+      }
+    }
+
+    letsGoBtn.addEventListener('click', () => {
+      letsGoBtn.style.display = 'none';
+      title.textContent = 'Choose an exercise';
+      dietIntro.style.display = 'none';
+      aboutSection.style.display = 'none';
+      contactSection.style.display = 'none';
+      showExerciseOptions();
+    });
+
+    function showExerciseOptions() {
+      exerciseOptionsDiv.innerHTML = '';
+      exerciseOptionsDiv.style.display = 'flex';
+      videoSection.style.display = 'none';
+      repCounterEl.textContent = '';
+      instructionsEl.textContent = '';
+      info.textContent = '';
+      currentExercise = null;
+      for (const exercise of exercises) {
+        const btn = document.createElement('button');
+        btn.className = 'exercise-btn';
+        btn.textContent = exercise;
+        btn.setAttribute('aria-label', exercise + ' exercise');
+        btn.addEventListener('click', () => {
+          exerciseOptionsDiv.style.display = 'none';
+          currentExercise = exercise;
+          title.textContent = 'Exercise: ' + exercise;
+          videoSection.style.display = 'block';
+          repCounterEl.textContent = 'Reps: 0';
+          aboutSection.style.display = 'none';
+          contactSection.style.display = 'none';
+          startDetection();
+          centerViewport();
+        });
+        exerciseOptionsDiv.appendChild(btn);
+      }
+    }
+
+    stopBtn.addEventListener('click', () => {
+  if (video.srcObject) {
+    let tracks = video.srcObject.getTracks();
+    tracks.forEach(track => track.stop());
+  }
+  video.srcObject = null;
+  detector = null;
+  poses = null;
+  showWorkoutSummary();
+});
+
+function restartWorkout() {
+  summarySection.style.display = 'none';
+  exerciseOptionsDiv.style.display = 'flex';
+  title.textContent = 'Choose an exercise';
+  repCounterEl.textContent = '';
+  instructionsEl.textContent = '';
+  info.textContent = '';
+}
+
+
+
+    navHome.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (video.srcObject) {
+  let tracks = video.srcObject.getTracks();
+  tracks.forEach(track => track.stop());
+}
+video.srcObject = null;
+detector = null;
+poses = null;
+repCount = 0;
+state = null;
+videoSection.style.display = 'none';
+summarySection.style.display = 'none';
+exerciseOptionsDiv.style.display = 'none';
+letsGoBtn.style.display = 'inline-block';
+dietIntro.style.display = 'block';
+title.textContent = 'Fitness starts at home';
+aboutSection.style.display = 'block';
+contactSection.style.display = 'block';
+currentExercise = null;
+window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    });
+
+    // navAbout.addEventListener('click', (e) => {
+    //   e.preventDefault();
+    //   if(currentExercise !== null) return;
+    //   aboutSection.style.display = 'block';
+    //   contactSection.style.display = 'block';
+    //   exerciseOptionsDiv.style.display = 'none';
+    //   videoSection.style.display = 'none';
+    //   title.textContent = 'Fitness starts at home';
+    //   letsGoBtn.style.display = 'inline-block';
+    //   instructionsEl.textContent = '';
+    //   repCounterEl.textContent = '';
+    //   info.textContent = '';
+    //   currentExercise = null;
+    //   aboutSection.scrollIntoView({behavior:'smooth'});
+    // });
+
+    navAbout.addEventListener('click', (e) => {
+  e.preventDefault();
+  stopVideoAndResetUI();
+  aboutSection.style.display = 'block';
+  contactSection.style.display = 'block';
+  exerciseOptionsDiv.style.display = 'none';
+  videoSection.style.display = 'none';
+  summarySection.style.display = 'none';
+  title.textContent = 'Fitness starts at home';
+  letsGoBtn.style.display = 'inline-block';
+  aboutSection.scrollIntoView({ behavior: 'smooth' });
+});
+
+
+    // navContact.addEventListener('click', (e) => {
+    //   e.preventDefault();
+    //   if(currentExercise !== null) return;
+    //   aboutSection.style.display = 'block';
+    //   contactSection.style.display = 'block';
+    //   exerciseOptionsDiv.style.display = 'none';
+    //   videoSection.style.display = 'none';
+    //   title.textContent = 'Fitness starts at home';
+    //   letsGoBtn.style.display = 'inline-block';
+    //   instructionsEl.textContent = '';
+    //   repCounterEl.textContent = '';
+    //   info.textContent = '';
+    //   currentExercise = null;
+    //   contactSection.scrollIntoView({behavior:'smooth'});
+    // });
+
+    navContact.addEventListener('click', (e) => {
+  e.preventDefault();
+  stopVideoAndResetUI();
+  aboutSection.style.display = 'block';
+  contactSection.style.display = 'block';
+  exerciseOptionsDiv.style.display = 'none';
+  videoSection.style.display = 'none';
+  summarySection.style.display = 'none';
+  title.textContent = 'Fitness starts at home';
+  letsGoBtn.style.display = 'inline-block';
+  contactSection.scrollIntoView({ behavior: 'smooth' });
+});
+
+    const navDiet = document.getElementById('navDiet');
+    const dietPage = document.getElementById('dietPage');
+
+navDiet.addEventListener('click', (e) => {
+  e.preventDefault();
+  stopVideoAndResetUI();
+  videoSection.style.display = 'none';
+  exerciseOptionsDiv.style.display = 'none';
+  aboutSection.style.display = 'none';
+  contactSection.style.display = 'none';
+  letsGoBtn.style.display = 'none';
+  dietPage.style.display = 'block';
+  dietIntro.style.display = 'none';
+  title.textContent = 'Personalized Diet Plan';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+  function stopVideoAndResetUI() {
+  if (video.srcObject) {
+    video.srcObject.getTracks().forEach(track => track.stop());
+  }
+  video.srcObject = null;
+  detector = null;
+  poses = null;
+  repCount = 0;
+  state = null;
+  currentExercise = null;
+  dietPage.style.display = 'none';
+}
+
+
+    function centerViewport(){
+      const middleOfPage = window.pageYOffset + window.innerHeight/2;
+      window.scrollTo({top: middleOfPage - 350, behavior:'smooth'});
+    }
+
+    function speak(text) {
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.pitch = 1;
+  utterance.rate = 1;
+  speechSynthesis.speak(utterance);
+  }
+
+
+    window.addEventListener('load', () => {
+      exerciseOptionsDiv.style.display = 'none';
+      videoSection.style.display = 'none';
+      aboutSection.style.display = 'block';
+      contactSection.style.display = 'block';
+      letsGoBtn.style.display = 'inline-block';
+      currentExercise = null;
+      title.textContent = 'Fitness starts at home';
+    });
+
+    // Listen for postMessage from iframe
+window.addEventListener('message', (event) => {
+  if (event.data === 'goHome') {
+    stopVideoAndResetUI();
+    dietPage.style.display = 'none';
+    aboutSection.style.display = 'block';
+    contactSection.style.display = 'block';
+    letsGoBtn.style.display = 'inline-block';
+    dietIntro.style.display = 'block';
+    title.textContent = 'Fitness starts at home';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+});
+
+
+  </script>
+</body>
+</html>
+
